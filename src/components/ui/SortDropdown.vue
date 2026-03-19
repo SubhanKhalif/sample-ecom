@@ -69,6 +69,7 @@ const selectOption = (value) => {
           <div class="py-1">
             <template v-for="option in options" :key="option.value">
               <MenuItem
+                as="button"
                 @click="selectOption(option.value)"
                 :class="[
                   'block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900',

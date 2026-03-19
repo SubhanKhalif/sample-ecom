@@ -30,6 +30,47 @@ const selectedPriceRange = ref('')
 const selectedBrand = ref('')
 const selectedRating = ref('')
 const sortBy = ref('price-low')
+
+// Initialize from URL query parameters
+const initializeFromQuery = () => {
+  const query = route.query
+  
+  searchQuery.value = query.search || ''
+  selectedCategory.value = query.category || ''
+  selectedPriceRange.value = query.priceRange || ''
+  selectedBrand.value = query.brand || ''
+  selectedRating.value = query.rating || ''
+  sortBy.value = query.sort || 'price-low'
+}
+
+// Update URL query parameters
+const updateQuery = () => {
+  const query = {}
+  
+  if (searchQuery.value) query.search = searchQuery.value
+  if (selectedCategory.value) query.category = selectedCategory.value
+  if (selectedPriceRange.value) query.priceRange = selectedPriceRange.value
+  if (selectedBrand.value) query.brand = selectedBrand.value
+  if (selectedRating.value) query.rating = selectedRating.value
+  if (sortBy.value !== 'price-low') query.sort = sortBy.value
+  
+  router.push({ query })
+}
+
+// Watch for query changes and update state
+watch(() => route.query, (newQuery) => {
+  searchQuery.value = newQuery.search || ''
+  selectedCategory.value = newQuery.category || ''
+  selectedPriceRange.value = newQuery.priceRange || ''
+  selectedBrand.value = newQuery.brand || ''
+  selectedRating.value = newQuery.rating || ''
+  sortBy.value = newQuery.sort || 'price-low'
+}, { immediate: true })
+
+// Watch for state changes and update URL
+watch([searchQuery, selectedCategory, selectedPriceRange, selectedBrand, selectedRating, sortBy], () => {
+  updateQuery()
+}, { deep: true })
 const priceRanges = [
   { id: 'under-50', name: 'Under $50', min: 0, max: 50 },
   { id: '50-100', name: '$50 - $100', min: 50, max: 100 },
